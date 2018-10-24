@@ -12,10 +12,24 @@ public:
 	void setRoot(Node *root) { this->root = root; }
 	Node *getRoot() { return root; }
 
+	Node *min(Node *min);
 	Node *insert(Node *node, std::string title);
 	Node *search(Node *node, std::string title);
 	Node *remove(Node *node, std::string title);
 };
+
+template <class T>
+Node* BinaryTree<T>::min(Node *node)
+{
+	Node *current = node;
+
+	while (current->left != nullptr)
+	{
+		current = current->left;
+	}
+
+	return current;
+}
 
 template <class T>
 Node* BinaryTree<T>::insert(Node *node, std::string title)
@@ -88,7 +102,7 @@ Node* BinaryTree<T>::remove(Node *node, std::string title)
 			return temp;
 		}
 
-		Node *temp = node->right; //find the min value of this tree
+		Node *temp = min(node->right);
 		node->title = temp->title;
 		node->rented = temp->rented;
 		node->rented = temp->rented;
