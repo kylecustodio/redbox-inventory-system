@@ -35,4 +35,5 @@ BinaryTree<Node> createTree(ifstream &input)
 		n->setAvailable(available);
 		n->setRented(rent);
 	}
+	return tree;
 }

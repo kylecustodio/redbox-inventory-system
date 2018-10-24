@@ -23,9 +23,9 @@ Node* BinaryTree<T>::min(Node *node)
 {
 	Node *current = node;
 
-	while (current->left != nullptr)
+	while (current->getLeft() != nullptr)
 	{
-		current = current->left;
+		current = current->getLeft();
 	}
 
 	return current;
@@ -36,17 +36,17 @@ Node* BinaryTree<T>::insert(Node *node, std::string title)
 {
 	if (node == nullptr)
 	{
-		Node *newNode(title);
+		Node *newNode = new Node(title);
 		return newNode;
 	}
 
-	if (title < node->title)
+	if (title < node->getTitle())
 	{
-		node->left = insert(node->left, title);
+		node->setLeft(insert(node->getLeft(), title));
 	}
-	else if (title > node->title)
+	else if (title > node->getTitle())
 	{
-		node.right = insert(node->right, title);
+		node->setRight(insert(node->getRight(), title));
 	}
 
 	return node;
@@ -60,14 +60,14 @@ Node* BinaryTree<T>::search(Node *node, std::string title)
 		return node;
 	}
 
-	if (node->title < title)
+	if (node->getTitle() < title)
 	{
-		return search(node->right, title);
+		return search(node->getRight(), title);
 	}
 
-	if (node->title > title)
+	if (node->getTitle() > title)
 	{
-		return search(node->left, title);
+		return search(node->getLeft(), title);
 	}
 }
 
@@ -79,34 +79,34 @@ Node* BinaryTree<T>::remove(Node *node, std::string title)
 		return node;
 	}
 
-	if (title < node->title)
+	if (title < node->getTitle())
 	{
-		node->left = remove(node->left, title);
+		node->setLeft(remove(node->getLeft(), title));
 	}
-	else if (title > node->title)
+	else if (title > node->getTitle())
 	{
-		node.right = remove(node->right, title);
+		node->setRight(remove(node->getRight(), title));
 	}
 	else
 	{
 		if (node.left == nullptr)
 		{
-			Node *temp = node->right;
+			Node *temp = node->getRight();
 			free(node);
 			return temp;
 		}
 		else if (node.right == nullptr)
 		{
-			Node *temp = node->left;
+			Node *temp = node->getLeft();
 			free(node);
 			return temp;
 		}
 
-		Node *temp = min(node->right);
-		node->title = temp->title;
-		node->rented = temp->rented;
-		node->rented = temp->rented;
-		node->right = delete(node->right, title);
+		Node *temp = min(node->getRight());
+		node->setTitle(temp->getTitle());
+		node->setAvailable(temp->getAvailable());
+		node->setRented(temp->getRented());
+		node->setRight(remove(node->getRight(), title));
 	}
 }
 
