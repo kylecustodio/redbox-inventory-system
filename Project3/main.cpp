@@ -9,6 +9,7 @@
 #include "BinaryTree.h"
 #include <iostream>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -91,10 +92,9 @@ void readTransaction(ifstream &input, BinaryTree<Node> tree)
 
 void add(string line, BinaryTree<Node> tree)
 {
-	cout << "add" << endl;
-
-	string title = "title"; //placeholder
-	int add = 0; //placeholder
+	string title = parseTitle(line);
+	string a = line.substr(line.find_last_of(',') + 1);
+	int add = stoi(a);
 	Node *node = tree.search(tree.getRoot(), title);
 	if (!node)
 	{
@@ -105,10 +105,9 @@ void add(string line, BinaryTree<Node> tree)
 
 void remove(string line, BinaryTree<Node> tree)
 {
-	cout << "remove" << endl;
-
-	string title = "title"; //placeholder
-	int remove = 0; //placeholder
+	string title = parseTitle(line);
+	string r = line.substr(line.find_last_of(',') + 1);
+	int remove = stoi(r);
 	Node *node = tree.search(tree.getRoot(), title);
 	if (node)
 	{
@@ -122,8 +121,6 @@ void remove(string line, BinaryTree<Node> tree)
 
 void rent(string line, BinaryTree<Node> tree)
 {
-	cout << "rent" << endl;
-
 	string title = parseTitle(line);
 	Node *node = tree.search(tree.getRoot(), title);
 
@@ -136,10 +133,7 @@ void rent(string line, BinaryTree<Node> tree)
 
 void returnMovie(string line, BinaryTree<Node> tree)
 {
-	cout << "return" << endl;
-
-	string title = "title"; //placeholder
-	int remove = 0; //placeholder
+	string title = parseTitle(line);
 	Node *node = tree.search(tree.getRoot(), title);
 
 	if (node)
