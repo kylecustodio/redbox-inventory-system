@@ -7,7 +7,7 @@ template <class T>
 class BinaryTree
 {
 private:
-	Node *root;
+	Node *root = nullptr;
 public:
 	void setRoot(Node *root) { this->root = root; }
 	Node *getRoot() { return root; }
@@ -37,6 +37,7 @@ Node* BinaryTree<T>::insert(Node *node, std::string title)
 	if (node == nullptr)
 	{
 		Node *newNode = new Node(title);
+		root = newNode;
 		return newNode;
 	}
 
@@ -65,10 +66,7 @@ Node* BinaryTree<T>::search(Node *node, std::string title)
 		return search(node->getRight(), title);
 	}
 
-	if (node->getTitle() > title)
-	{
-		return search(node->getLeft(), title);
-	}
+	return search(node->getLeft(), title);
 }
 
 template <class T>
@@ -89,13 +87,13 @@ Node* BinaryTree<T>::remove(Node *node, std::string title)
 	}
 	else
 	{
-		if (node.left == nullptr)
+		if (node->getLeft() == nullptr)
 		{
 			Node *temp = node->getRight();
 			free(node);
 			return temp;
 		}
-		else if (node.right == nullptr)
+		else if (node->getRight() == nullptr)
 		{
 			Node *temp = node->getLeft();
 			free(node);
