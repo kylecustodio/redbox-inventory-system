@@ -18,6 +18,7 @@ void add(string line, BinaryTree<Node> tree);
 void remove(string line, BinaryTree<Node> tree);
 void rent(string line, BinaryTree<Node> tree);
 void returnMovie(string line, BinaryTree<Node> tree);
+string parseTitle(string line);
 
 int main()
 {
@@ -41,7 +42,7 @@ BinaryTree<Node> createTree(ifstream &input)
 		int end = line.rfind('"');
 		int num = end + 2;
 		int nextNum = num + 2;
-		string title = line.substr(0, end);
+		string title = parseTitle(line);
 		string a = line.substr(num, nextNum);
 		string r = line.substr(nextNum);
 		int available = stoi(a);
@@ -123,7 +124,7 @@ void rent(string line, BinaryTree<Node> tree)
 {
 	cout << "rent" << endl;
 
-	string title = "title"; //placeholder
+	string title = parseTitle(line);
 	Node *node = tree.search(tree.getRoot(), title);
 
 	if (node)
@@ -146,4 +147,11 @@ void returnMovie(string line, BinaryTree<Node> tree)
 		node->setAvailable(node->getAvailable() + 1);
 		node->setRented(node->getRented() - 1);
 	}
+}
+
+string parseTitle(string line)
+{
+	int start = line.find_first_of('"');
+	int end = line.find_last_of('"');
+	return line.substr(start + 1, end - start);
 }
