@@ -2,6 +2,9 @@
 #define BINARY_TREE_H
 
 #include "Node.h"
+#include <string>
+#include <fstream>
+#include <iomanip>
 
 template <class T>
 class BinaryTree
@@ -16,6 +19,7 @@ public:
 	Node *insert(Node *node, std::string title);
 	Node *search(Node *node, std::string title);
 	Node *remove(Node *node, std::string title);
+	void printOrder(Node *node, std::ofstream &out);
 };
 
 template <class T>
@@ -37,7 +41,7 @@ Node* BinaryTree<T>::insert(Node *node, std::string title)
 	if (node == nullptr)
 	{
 		Node *newNode = new Node(title);
-		root = newNode;
+		//root = newNode;
 		return newNode;
 	}
 
@@ -106,6 +110,24 @@ Node* BinaryTree<T>::remove(Node *node, std::string title)
 		node->setRented(temp->getRented());
 		node->setRight(remove(node->getRight(), title));
 	}
+
+	return node;
+}
+
+template <class T>
+void BinaryTree<T>::printOrder(Node *node, std::ofstream &out)
+{
+	if (node == nullptr)
+	{
+		return;
+	}
+
+	printOrder(node->getLeft(), out);
+
+	out << std::setw(30) << std::left << node->getTitle();
+	out << std::setw(5) << std::right << node->getAvailable() << std::setw(5) << node->getRented() << std::endl;
+
+	printOrder(node->getRight(), out);
 }
 
 #endif

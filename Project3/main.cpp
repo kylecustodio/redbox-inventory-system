@@ -9,6 +9,7 @@
 #include "BinaryTree.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <string>
 
 using namespace std;
@@ -26,11 +27,13 @@ int main()
 	ifstream input("inventory.dat");
 	BinaryTree<Node> tree = createTree(input);
 	input.close();
-	input.open("transaction.log");
-	readTransaction(input, tree);
-	
+	//input.open("transaction.log");
+	//readTransaction(input, tree);
+	//input.close();
 	//print tree in alpha
-
+	ofstream out("redbox_kiosk.txt");
+	tree.printOrder(tree.getRoot(), out);
+	out.close();
 	return 0;
 }
 
@@ -38,19 +41,13 @@ BinaryTree<Node> createTree(ifstream &input)
 {
 	BinaryTree<Node> tree;
 	string line;
+	getline(input, line);
+	tree.setRoot(tree.insert(nullptr, parseTitle(line)));
 	while (getline(input, line))
 	{
 		int end = line.rfind('"');
-		int num = end + 2;
-		int nextNum = num + 2;
 		string title = parseTitle(line);
-		string a = line.substr(num, nextNum);
-		string r = line.substr(nextNum);
-		int available = stoi(a);
-		int rented = stoi(r);
 		Node *n = tree.insert(tree.getRoot(), title);
-		n->setAvailable(available);
-		n->setRented(rented);
 	}
 	return tree;
 }
@@ -85,7 +82,6 @@ void readTransaction(ifstream &input, BinaryTree<Node> tree)
 		}
 
 		//output to error log
-		output << line << endl;
 	}
 }
 
@@ -147,5 +143,5 @@ string parseTitle(string line)
 {
 	int start = line.find_first_of('"');
 	int end = line.find_last_of('"');
-	return line.substr(start + 1, end - start);
+	return line.substr(start + 1, end - start - 1);
 }
