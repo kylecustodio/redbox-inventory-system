@@ -101,7 +101,8 @@ void add(string line, BinaryTree<Node> tree)
 {
 	string title = parseTitle(line);
 	int add = parseInt(line);
-	Node *node = tree.search(tree.getRoot(), title);
+	Node *n = new Node(title);
+	Node *node = tree.search(tree.getRoot(), n);
 	if (!node)
 	{
 		Node *newNode = new Node(title, add, 0);
@@ -115,13 +116,14 @@ void remove(string line, BinaryTree<Node> tree)
 {
 	string title = parseTitle(line);
 	int remove = parseInt(line);
-	Node *node = tree.search(tree.getRoot(), title);
+	Node *n = new Node(title);
+	Node *node = tree.search(tree.getRoot(), n);
 	if (node)
 	{
 		node->setAvailable(node->getAvailable() - remove);
 		if (node->getAvailable() <= 0 && node->getRented() <= 0)
 		{
-			tree.remove(tree.getRoot(), title);
+			tree.remove(tree.getRoot(), n);
 		}
 	}
 }
@@ -129,7 +131,8 @@ void remove(string line, BinaryTree<Node> tree)
 void rent(string line, BinaryTree<Node> tree)
 {
 	string title = parseTitle(line);
-	Node *node = tree.search(tree.getRoot(), title);
+	Node *n = new Node(title);
+	Node *node = tree.search(tree.getRoot(), n);
 
 	if (node)
 	{
@@ -141,7 +144,8 @@ void rent(string line, BinaryTree<Node> tree)
 void returnMovie(string line, BinaryTree<Node> tree)
 {
 	string title = parseTitle(line);
-	Node *node = tree.search(tree.getRoot(), title);
+	Node *n = new Node(title);
+	Node *node = tree.search(tree.getRoot(), n);
 
 	if (node)
 	{
