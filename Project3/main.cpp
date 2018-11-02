@@ -21,19 +21,24 @@ void remove(string line, BinaryTree<Node> tree);
 void rent(string line, BinaryTree<Node> tree);
 void returnMovie(string line, BinaryTree<Node> tree);
 string parseTitle(string line);
+int parseInt(string line);
 
 int main()
 {
 	ifstream input("inventory.dat");
 	BinaryTree<Node> tree = createTree(input);
 	input.close();
+
 	//input.open("transaction.log");
 	//readTransaction(input, tree);
 	//input.close();
+
 	//print tree in alpha
 	ofstream out("redbox_kiosk.txt");
 	tree.printOrder(tree.getRoot(), out);
 	out.close();
+
+	system("pause");
 	return 0;
 }
 
@@ -42,12 +47,18 @@ BinaryTree<Node> createTree(ifstream &input)
 	BinaryTree<Node> tree;
 	string line;
 	getline(input, line);
-	tree.setRoot(tree.insert(nullptr, parseTitle(line)));
+	string title = parseTitle(line);
+	int available = parseInt(line.substr(line.find(',')));
+	int rented = parseInt(line.substr(line.rfind(',')));
+	Node *n = new Node(title, available, rented);
+	tree.setRoot(n);
 	while (getline(input, line))
 	{
-		int end = line.rfind('"');
-		string title = parseTitle(line);
-		Node *n = tree.insert(tree.getRoot(), title);
+		available = parseInt(line.substr(line.find(',')));
+		rented = parseInt(line.substr(line.rfind(',')));
+		title = parseTitle(line);
+		n = new Node(title, available, rented);
+		tree.insert(tree.getRoot(), n);
 	}
 	return tree;
 }
@@ -89,12 +100,13 @@ void readTransaction(ifstream &input, BinaryTree<Node> tree)
 void add(string line, BinaryTree<Node> tree)
 {
 	string title = parseTitle(line);
-	string a = line.substr(line.find_last_of(',') + 1);
-	int add = stoi(a);
+	int add = parseInt(line);
 	Node *node = tree.search(tree.getRoot(), title);
 	if (!node)
 	{
-		node = tree.insert(tree.getRoot(), title);
+		Node *newNode = new Node(title, add, 0);
+		node = tree.insert(tree.getRoot(), newNode);
+		return;
 	}
 	node->setAvailable(node->getAvailable() + add);
 }
@@ -102,8 +114,7 @@ void add(string line, BinaryTree<Node> tree)
 void remove(string line, BinaryTree<Node> tree)
 {
 	string title = parseTitle(line);
-	string r = line.substr(line.find_last_of(',') + 1);
-	int remove = stoi(r);
+	int remove = parseInt(line);
 	Node *node = tree.search(tree.getRoot(), title);
 	if (node)
 	{
@@ -144,4 +155,16 @@ string parseTitle(string line)
 	int start = line.find_first_of('"');
 	int end = line.find_last_of('"');
 	return line.substr(start + 1, end - start - 1);
+}
+
+int parseInt(string str)
+{
+	int num;
+	int index = str.find_first_of("0123456789");
+	if (index > 0)
+	{
+		char s = str[index];
+		num = atoi(&s);
+	}
+	return num;
 }
