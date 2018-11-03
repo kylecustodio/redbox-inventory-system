@@ -22,6 +22,7 @@ void rent(string line, BinaryTree<Node> tree);
 void returnMovie(string line, BinaryTree<Node> tree);
 string parseTitle(string line);
 int parseInt(string line);
+bool checkExists(BinaryTree<Node> tree, string line);
 
 int main()
 {
@@ -35,6 +36,7 @@ int main()
 
 	//print tree in alpha
 	ofstream out("redbox_kiosk.txt");
+	cout << *(tree.getRoot()) << endl;
 	tree.printOrder(tree.getRoot(), out);
 	out.close();	
 	system("pause");
@@ -80,17 +82,20 @@ void readTransaction(ifstream &input, BinaryTree<Node> tree)
 		}
 		else if (line.rfind("remove", 0) == 0)
 		{
-			remove(line, tree);
+			if(checkExists(tree, line))
+				remove(line, tree);
 			continue;
 		}
 		else if (line.rfind("rent", 0) == 0)
 		{
-			rent(line, tree);
+			if (checkExists(tree, line))
+				rent(line, tree);
 			continue;
 		}
 		else if (line.rfind("return", 0) == 0)
 		{
-			returnMovie(line, tree);
+			if (checkExists(tree, line))
+				returnMovie(line, tree);
 			continue;
 		}
 
@@ -103,8 +108,6 @@ void add(string line, BinaryTree<Node> tree)
 {
 	string title = parseTitle(line);
 	int add = parseInt(line);
-
-	cout << "add " << title << add << endl;
 	Node *node = tree.search(tree.getRoot(), new Node(title));
 	if (!node)
 	{
@@ -119,22 +122,17 @@ void remove(string line, BinaryTree<Node> tree)
 {
 	string title = parseTitle(line);
 	int remove = parseInt(line);
-	cout << "remove " << title << remove << endl;
 	Node *node = tree.search(tree.getRoot(), new Node(title));
-	if (node)
-	{
 		node->setAvailable(node->getAvailable() - remove);
 		if (node->getAvailable() <= 0 && node->getRented() <= 0)
 		{
 			tree.remove(tree.getRoot(), node);
 		}
-	}
 }
 
 void rent(string line, BinaryTree<Node> tree)
 {
 	string title = parseTitle(line);
-	cout << "rent " << title << endl;
 	Node *node = tree.search(tree.getRoot(), new Node(title));
 
 	if (node)
@@ -147,14 +145,9 @@ void rent(string line, BinaryTree<Node> tree)
 void returnMovie(string line, BinaryTree<Node> tree)
 {
 	string title = parseTitle(line);
-	cout << "return "  << title << endl;
 	Node *node = tree.search(tree.getRoot(), new Node(title));
-
-	if (node)
-	{
 		node->setAvailable(node->getAvailable() + 1);
 		node->setRented(node->getRented() - 1);
-	}
 }
 
 string parseTitle(string line)
@@ -174,4 +167,11 @@ int parseInt(string str)
 		num = atoi(&s);
 	}
 	return num;
+}
+
+bool checkExists(BinaryTree<Node> tree, string line)
+{
+	string title = parseTitle(line);
+	Node *n = tree.search(tree.getRoot(), new Node(title));
+	return n;
 }

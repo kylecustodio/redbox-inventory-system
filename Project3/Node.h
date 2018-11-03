@@ -9,8 +9,8 @@ private:
 	std::string title;
 	int available;
 	int rented;
-	Node *left;
-	Node *right;
+	Node *left = nullptr;
+	Node *right = nullptr;
 public:
 	Node();
 	Node(std::string title);

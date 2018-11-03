@@ -1,7 +1,6 @@
 #ifndef BINARY_TREE_H
 #define BINARY_TREE_H
 
-#include "Node.h"
 #include <string>
 #include <iostream>
 
@@ -9,7 +8,7 @@ template <class T>
 class BinaryTree
 {
 private:
-	T *root = nullptr;
+	T *root;
 public:
 	void setRoot(T *root) { this->root = root; }
 	T *getRoot() { return root; }
@@ -39,14 +38,14 @@ T* BinaryTree<T>::insert(T *root, T *node)
 {
 	if (!root)
 	{
-		return node;
+		root = node;
 	}
 	
-	if (node < root)
+	if (*node < *root)
 	{
 		root->setLeft(insert(root->getLeft(), node));
 	}
-	else if (node > root)
+	else if (*node > *root)
 	{
 		root->setRight(insert(root->getRight(), node));
 	}
@@ -57,12 +56,12 @@ T* BinaryTree<T>::insert(T *root, T *node)
 template <class T>
 T* BinaryTree<T>::search(T *root, T *node)
 {
-	if (!root || root == node)
+	if (!root || *root == *node)
 	{
 		return root;
 	}
 
-	if (root < node)
+	if (*root < *node)
 	{
 		return search(root->getRight(), node);
 	}
@@ -78,32 +77,39 @@ T* BinaryTree<T>::remove(T *root, T *node)
 		return root;
 	}
 
-	if (node < root)
+	if (*node < *root)
 	{
 		root->setLeft(remove(root->getLeft(), node));
 	}
-	else if (node > root)
+	else if (*node > *root)
 	{
 		root->setRight(remove(root->getRight(), node));
 	}
 	else
 	{
-		if (!root->getLeft())
+		if (!root->getLeft() && !root->getRight())
 		{
-			T *temp = root->getRight();
-			free(root);
-			return temp;
+			delete root;
+			root = nullptr;
+		}
+		else if (!root->getLeft())
+		{
+			T *temp = root;
+			root = root->getRight();
+			delete temp;
 		}
 		else if (!root->getRight())
 		{
-			T *temp = root->getLeft();
-			free(root);
-			return temp;
+			T *temp = root;
+			root = root->getLeft();
+			delete temp;
 		}
-
-		T *temp = min(root->getRight());
-		root = temp;
-		root->setRight(remove(root->getRight(), node));
+		else
+		{
+			T *temp = min(root->getRight());
+			*root = *temp;
+			root->setRight(remove(root->getRight(), temp));
+		}
 	}
 
 	return root;
