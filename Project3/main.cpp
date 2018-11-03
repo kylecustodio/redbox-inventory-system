@@ -29,15 +29,14 @@ int main()
 	BinaryTree<Node> tree = createTree(input);
 	input.close();
 
-	//input.open("transaction.log");
+	input.open("transaction.log");
 	//readTransaction(input, tree);
-	//input.close();
+	input.close();
 
 	//print tree in alpha
 	ofstream out("redbox_kiosk.txt");
 	tree.printOrder(tree.getRoot(), out);
-	out.close();
-
+	out.close();	
 	system("pause");
 	return 0;
 }
@@ -47,19 +46,22 @@ BinaryTree<Node> createTree(ifstream &input)
 	BinaryTree<Node> tree;
 	string line;
 	getline(input, line);
+
+
 	string title = parseTitle(line);
-	int available = parseInt(line.substr(line.find(',')));
+	int available = parseInt(line.substr(line.rfind('"')));
 	int rented = parseInt(line.substr(line.rfind(',')));
-	Node *n = new Node(title, available, rented);
-	tree.setRoot(n);
+
+	tree.setRoot(new Node(title, available, rented));
+
 	while (getline(input, line))
 	{
-		available = parseInt(line.substr(line.find(',')));
-		rented = parseInt(line.substr(line.rfind(',')));
 		title = parseTitle(line);
-		n = new Node(title, available, rented);
-		tree.insert(tree.getRoot(), n);
+		available = parseInt(line.substr(line.rfind('"')));
+		rented = parseInt(line.substr(line.rfind(',')));
+		tree.insert(tree.getRoot(), new Node(title, available, rented));
 	}
+
 	return tree;
 }
 
@@ -101,8 +103,9 @@ void add(string line, BinaryTree<Node> tree)
 {
 	string title = parseTitle(line);
 	int add = parseInt(line);
-	Node *n = new Node(title);
-	Node *node = tree.search(tree.getRoot(), n);
+
+	cout << "add " << title << add << endl;
+	Node *node = tree.search(tree.getRoot(), new Node(title));
 	if (!node)
 	{
 		Node *newNode = new Node(title, add, 0);
@@ -116,14 +119,14 @@ void remove(string line, BinaryTree<Node> tree)
 {
 	string title = parseTitle(line);
 	int remove = parseInt(line);
-	Node *n = new Node(title);
-	Node *node = tree.search(tree.getRoot(), n);
+	cout << "remove " << title << remove << endl;
+	Node *node = tree.search(tree.getRoot(), new Node(title));
 	if (node)
 	{
 		node->setAvailable(node->getAvailable() - remove);
 		if (node->getAvailable() <= 0 && node->getRented() <= 0)
 		{
-			tree.remove(tree.getRoot(), n);
+			tree.remove(tree.getRoot(), node);
 		}
 	}
 }
@@ -131,8 +134,8 @@ void remove(string line, BinaryTree<Node> tree)
 void rent(string line, BinaryTree<Node> tree)
 {
 	string title = parseTitle(line);
-	Node *n = new Node(title);
-	Node *node = tree.search(tree.getRoot(), n);
+	cout << "rent " << title << endl;
+	Node *node = tree.search(tree.getRoot(), new Node(title));
 
 	if (node)
 	{
@@ -144,8 +147,8 @@ void rent(string line, BinaryTree<Node> tree)
 void returnMovie(string line, BinaryTree<Node> tree)
 {
 	string title = parseTitle(line);
-	Node *n = new Node(title);
-	Node *node = tree.search(tree.getRoot(), n);
+	cout << "return "  << title << endl;
+	Node *node = tree.search(tree.getRoot(), new Node(title));
 
 	if (node)
 	{

@@ -37,11 +37,11 @@ T* BinaryTree<T>::min(T *root)
 template <class T>
 T* BinaryTree<T>::insert(T *root, T *node)
 {
-	if (root == nullptr)
+	if (!root)
 	{
 		return node;
 	}
-
+	
 	if (node < root)
 	{
 		root->setLeft(insert(root->getLeft(), node));
@@ -51,7 +51,7 @@ T* BinaryTree<T>::insert(T *root, T *node)
 		root->setRight(insert(root->getRight(), node));
 	}
 
-	return node;
+	return root;
 }
 
 template <class T>
