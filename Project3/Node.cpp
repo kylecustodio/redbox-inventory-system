@@ -43,13 +43,13 @@ bool Node::operator<(const Node &right)
 	return title < right.title;
 }
 
-Node& Node::operator=(Node &right)
-{
-	title = right.title;
-	available = right.available;
-	rented = right.rented;
-	return *this;
-}
+//Node& Node::operator=(Node &right)
+//{
+//	title = right.title;
+//	available = right.available;
+//	rented = right.rented;
+//	return *this;
+//}
 
 std::ostream& operator<<(std::ostream &out, const Node &node)
 {

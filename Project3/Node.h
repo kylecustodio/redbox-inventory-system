@@ -35,7 +35,7 @@ public:
 	bool operator==(const Node &right);
 	bool operator>(const Node &right);
 	bool operator<(const Node &right);
-	Node& operator=(Node &n);
+	//Node& operator=(Node &n);
 
 	friend std::ostream& operator<<(std::ostream &out, const Node &node);
 
