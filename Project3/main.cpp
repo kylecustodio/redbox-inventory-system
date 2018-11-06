@@ -145,34 +145,45 @@ void readTransaction(ifstream &input, BinaryTree<Node> tree)
 	while (getline(input, line))
 	{
 		//check for a proper command
-		if (line.rfind("add", 0) == 0)
+		//make sure there are only 3 or 1 characters after the last quotation mark
+		string check = line.substr(line.find_last_of('"'));
+		int icheck = (int)check.length();
+
+		if (line.rfind("add", 0) == 0 && icheck == 3)
 		{
 			add(line, tree);
 			continue;
 		}
-		else if (line.rfind("remove", 0) == 0)
+		else if (line.rfind("remove", 0) == 0 && icheck == 3)
 		{
 			//make sure that the movie is in the tree
 			if (checkExists(tree, line))
+			{
 				remove(line, tree);
-			continue;
+				continue;
+			}
 		}
-		else if (line.rfind("rent", 0) == 0)
+		else if (line.rfind("rent", 0) == 0 && icheck == 1)
 		{
 			//make sure that the movie is in the tree
 			if (checkExists(tree, line))
+			{
 				rent(line, tree);
-			continue;
+				continue;
+			}
 		}
-		else if (line.rfind("return", 0) == 0)
+		else if (line.rfind("return", 0) == 0 && icheck == 1)
 		{
 			//make sure that the movie is in the tree
 			if (checkExists(tree, line))
+			{
 				returnMovie(line, tree);
-			continue;
+				continue;
+			}
 		}
 
 		//output to error log
+		output << line << endl;
 	}
 }
 

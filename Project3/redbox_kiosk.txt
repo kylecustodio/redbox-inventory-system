@@ -1,6 +1,5 @@
-Arrival                           4    0
 Beauty and the Beast              2    2
-Captain America: Civil War        0    1
-Doctor Strange                    2    4
+Doctor Strange                    1    5
 Lilo and Stitch                   0    1
-Passengers                        4    4
+Passengers                        2    4
+The Crow                          1    0

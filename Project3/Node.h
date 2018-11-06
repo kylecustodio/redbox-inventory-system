@@ -31,11 +31,12 @@ public:
 	void setLeft(Node *left) { this->left = left; }
 	void setRight(Node *right) { this->right = right; }
 
+	void copyNode(Node n);
+
 	//Operator
 	bool operator==(const Node &right);
 	bool operator>(const Node &right);
 	bool operator<(const Node &right);
-	//Node& operator=(Node &n);
 
 	friend std::ostream& operator<<(std::ostream &out, const Node &node);
 

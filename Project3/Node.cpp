@@ -28,6 +28,13 @@ Node::Node(std::string title, int available, int rented, Node *left, Node *right
 	this->right = right;
 }
 
+void Node::copyNode(Node n)
+{
+	this->title = n.title;
+	this->available = n.available;
+	this->rented = n.rented;
+}
+
 bool Node::operator==(const Node &right)
 {
 	return title == right.title;
@@ -42,14 +49,6 @@ bool Node::operator<(const Node &right)
 {
 	return title < right.title;
 }
-
-//Node& Node::operator=(Node &right)
-//{
-//	title = right.title;
-//	available = right.available;
-//	rented = right.rented;
-//	return *this;
-//}
 
 std::ostream& operator<<(std::ostream &out, const Node &node)
 {

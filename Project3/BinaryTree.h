@@ -26,7 +26,7 @@ T* BinaryTree<T>::min(T *root)
 	T *current = root;
 
 	//find left most leaf
-	while (!current->getLeft())
+	while (current->getLeft())
 	{
 		current = current->getLeft();
 	}
@@ -98,8 +98,14 @@ T* BinaryTree<T>::remove(T *root, T *node)
 	//we've found what we're deleting
 	else
 	{
-		//1 or 0 children
-		if (!root->getLeft())
+		//0 children
+		if (!root->getLeft() && !root->getRight())
+		{
+			delete root;
+			root = nullptr;
+		}
+		//1 child
+		else if (!root->getLeft())
 		{
 			T *temp = root->getRight();
 
@@ -127,15 +133,15 @@ T* BinaryTree<T>::remove(T *root, T *node)
 
 			return root;
 		}
-
 		//2 children
-		T *temp = min(root->getRight());
+		else
+		{
+			T *temp = min(root->getRight());
 
-		root->setTitle(temp->getTitle());
-		root->setAvailable(temp->getAvailable());
-		root->setRented(temp->getRented());
+			root->copyNode(*temp);
 
-		root->setRight(remove(root->getRight(), temp));
+			root->setRight(remove(root->getRight(), root));
+		}
 	}
 
 	return root;
