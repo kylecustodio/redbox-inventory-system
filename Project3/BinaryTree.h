@@ -1,3 +1,10 @@
+/**
+	Kyle Custodio
+	KYC180000
+
+	Project 3
+*/
+
 #ifndef BINARY_TREE_H
 #define BINARY_TREE_H
 
