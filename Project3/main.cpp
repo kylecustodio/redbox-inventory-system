@@ -105,7 +105,6 @@ int main()
 	ofstream out("redbox_kiosk.txt");
 	tree.printOrder(tree.getRoot(), out);
 	out.close();
-	system("pause");
 	return 0;
 }
 
