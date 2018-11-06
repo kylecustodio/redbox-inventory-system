@@ -151,13 +151,20 @@ void readTransaction(ifstream &input, BinaryTree<Node> tree)
 
 		if (line.rfind("add", 0) == 0 && icheck == 3)
 		{
-			add(line, tree);
-			continue;
+			string check2 = line.substr(0, line.find_first_of('"'));
+			int icheck2 = (int)check2.length();
+			if (icheck2 == 4) // make sure begginning is "add "
+			{
+				add(line, tree);
+				continue;
+			}
 		}
 		else if (line.rfind("remove", 0) == 0 && icheck == 3)
 		{
+			string check2 = line.substr(0, line.find_first_of('"'));
+			int icheck2 = (int)check2.length();
 			//make sure that the movie is in the tree
-			if (checkExists(tree, line))
+			if (checkExists(tree, line) && icheck2 == 7) //make sure beginning is "remove "
 			{
 				remove(line, tree);
 				continue;
@@ -165,8 +172,10 @@ void readTransaction(ifstream &input, BinaryTree<Node> tree)
 		}
 		else if (line.rfind("rent", 0) == 0 && icheck == 1)
 		{
+			string check2 = line.substr(0, line.find_first_of('"'));
+			int icheck2 = (int)check2.length();
 			//make sure that the movie is in the tree
-			if (checkExists(tree, line))
+			if (checkExists(tree, line) && icheck2 == 5) //make sure beginning is "rent "
 			{
 				rent(line, tree);
 				continue;
@@ -174,8 +183,10 @@ void readTransaction(ifstream &input, BinaryTree<Node> tree)
 		}
 		else if (line.rfind("return", 0) == 0 && icheck == 1)
 		{
+			string check2 = line.substr(0, line.find_first_of('"'));
+			int icheck2 = (int)check2.length();
 			//make sure that the movie is in the tree
-			if (checkExists(tree, line))
+			if (checkExists(tree, line) && icheck2 == 7) //make sure beginning is "return "
 			{
 				returnMovie(line, tree);
 				continue;
