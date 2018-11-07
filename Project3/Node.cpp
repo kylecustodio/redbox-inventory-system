@@ -1,3 +1,10 @@
+/**
+	Kyle Custodio
+	KYC180000
+
+	Project 3
+*/
+
 #include "Node.h"
 #include <iomanip>
 

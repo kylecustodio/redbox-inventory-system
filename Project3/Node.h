@@ -1,3 +1,10 @@
+/**
+	Kyle Custodio
+	KYC180000
+
+	Project 3
+*/
+
 #ifndef  NODE_H
 #define NODE_H
 
