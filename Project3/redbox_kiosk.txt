@@ -1,0 +1,5 @@
+Beauty and the Beast              2    2
+Doctor Strange                    1    5
+Lilo and Stitch                   0    1
+Passengers                        2    4
+The Crow                          1    0

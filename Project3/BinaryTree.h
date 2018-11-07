@@ -1,29 +1,32 @@
 #ifndef BINARY_TREE_H
 #define BINARY_TREE_H
 
-#include "Node.h"
+#include <string>
+#include <iostream>
 
 template <class T>
 class BinaryTree
 {
 private:
-	Node *root;
+	T *root;
 public:
-	void setRoot(Node *root) { this->root = root; }
-	Node *getRoot() { return root; }
+	void setRoot(T *root) { this->root = root; }
+	T *getRoot() { return root; }
 
-	Node *min(Node *min);
-	Node *insert(Node *node, std::string title);
-	Node *search(Node *node, std::string title);
-	Node *remove(Node *node, std::string title);
+	T *min(T *root);
+	T *insert(T *root, T *node);
+	T *search(T *root, T *node);
+	T *remove(T *root, T *node);
+	void printOrder(T *root, std::ostream &out);
 };
 
 template <class T>
-Node* BinaryTree<T>::min(Node *node)
+T* BinaryTree<T>::min(T *root)
 {
-	Node *current = node;
+	T *current = root;
 
-	while (current->getLeft() != nullptr)
+	//find left most leaf
+	while (current->getLeft())
 	{
 		current = current->getLeft();
 	}
@@ -32,82 +35,135 @@ Node* BinaryTree<T>::min(Node *node)
 }
 
 template <class T>
-Node* BinaryTree<T>::insert(Node *node, std::string title)
+T* BinaryTree<T>::insert(T *root, T *node)
 {
-	if (node == nullptr)
+	//base case
+	if (!root)
 	{
-		Node *newNode = new Node(title);
-		return newNode;
+		root = node;
 	}
 
-	if (title < node->getTitle())
+	//what we're inserting belongs on the left
+	if (*node < *root)
 	{
-		node->setLeft(insert(node->getLeft(), title));
+		root->setLeft(insert(root->getLeft(), node));
 	}
-	else if (title > node->getTitle())
+	//what we're inserting belongs on the right
+	else if (*node > *root)
 	{
-		node->setRight(insert(node->getRight(), title));
+		root->setRight(insert(root->getRight(), node));
 	}
 
-	return node;
+	return root;
 }
 
 template <class T>
-Node* BinaryTree<T>::search(Node *node, std::string title)
+T* BinaryTree<T>::search(T *root, T *node)
 {
-	if (node == nullptr || node->getTitle() == title)
+	//base case
+	if (!root || *root == *node)
 	{
-		return node;
+		return root;
 	}
 
-	if (node->getTitle() < title)
+	//what we're searching for is on the right
+	if (*root < *node)
 	{
-		return search(node->getRight(), title);
+		return search(root->getRight(), node);
 	}
 
-	if (node->getTitle() > title)
-	{
-		return search(node->getLeft(), title);
-	}
+	//what we're searching for is on the left
+	return search(root->getLeft(), node);
 }
 
 template <class T>
-Node* BinaryTree<T>::remove(Node *node, std::string title)
+T* BinaryTree<T>::remove(T *root, T *node)
 {
-	if (node == nullptr)
+	//base case
+	if (!root)
 	{
-		return node;
+		return root;
 	}
 
-	if (title < node->getTitle())
+	//what we're deleting is on the left
+	if (*node < *root)
 	{
-		node->setLeft(remove(node->getLeft(), title));
+		root->setLeft(remove(root->getLeft(), node));
 	}
-	else if (title > node->getTitle())
+	//what we're deleting is on the right
+	else if (*node > *root)
 	{
-		node->setRight(remove(node->getRight(), title));
+		root->setRight(remove(root->getRight(), node));
 	}
+	//we've found what we're deleting
 	else
 	{
-		if (node.left == nullptr)
+		//0 children
+		if (!root->getLeft() && !root->getRight())
 		{
-			Node *temp = node->getRight();
-			free(node);
-			return temp;
+			delete root;
+			root = nullptr;
 		}
-		else if (node.right == nullptr)
+		//1 child
+		else if (!root->getLeft())
 		{
-			Node *temp = node->getLeft();
-			free(node);
-			return temp;
-		}
+			T *temp = root->getRight();
 
-		Node *temp = min(node->getRight());
-		node->setTitle(temp->getTitle());
-		node->setAvailable(temp->getAvailable());
-		node->setRented(temp->getRented());
-		node->setRight(remove(node->getRight(), title));
+			root->setTitle(temp->getTitle());
+			root->setAvailable(temp->getAvailable());
+			root->setRented(temp->getRented());
+			root->setLeft(temp->getLeft());
+			root->setRight(temp->getRight());
+
+			delete temp;
+
+			return root;
+		}
+		else if (!root->getRight())
+		{
+			T *temp = root->getLeft();
+
+			root->setTitle(temp->getTitle());
+			root->setAvailable(temp->getAvailable());
+			root->setRented(temp->getRented());
+			root->setLeft(temp->getLeft());
+			root->setRight(temp->getRight());
+
+			delete temp;
+
+			return root;
+		}
+		//2 children
+		else
+		{
+			T *temp = min(root->getRight());
+
+			root->copyNode(*temp);
+
+			root->setRight(remove(root->getRight(), root));
+		}
 	}
+
+	return root;
+}
+
+template <class T>
+void BinaryTree<T>::printOrder(T *root, std::ostream &out)
+{
+	//we've reached the end of a leaf
+	if (!root)
+	{
+		return;
+	}
+
+	//process left
+	printOrder(root->getLeft(), out);
+
+	//process node
+	out << *root << std::endl;
+
+	//process right
+	printOrder(root->getRight(), out);
 }
 
 #endif
